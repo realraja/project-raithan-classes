@@ -33,3 +33,12 @@ export const userTryCatch = (passedFunction) => async(req) => {
         return ResponseFailedError(500, "Internal Server Error", error.message);
     }
 }
+
+
+export const clientTryCatch = (passedFunction) => async(data) => {
+    try {
+        return await passedFunction(data);
+    } catch (error) {
+        return ResponseFailedError(500, "Internal Server Error", error.message);
+    }
+}

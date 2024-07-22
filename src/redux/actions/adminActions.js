@@ -26,7 +26,7 @@ const serverUrl = 'api/';
 export const checkAdmin = createAsyncThunk('checkAdmin',async(args,{rejectWithValue})=>{
     // console.log('post data===>')
     try {
-      const {data} = await axios.get(`http://localhost:3000/api/admin`)
+      const {data} = await axios.get(`/api/admin`)
           return data;
     } catch (error) {
       return rejectWithValue(error.response.data.message);
