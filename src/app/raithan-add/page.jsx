@@ -1,11 +1,19 @@
-"use client"
+"use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from '@/components/admin/Chart';
 import Layout from '@/components/admin/Layout';
 import StatsCard from '@/components/admin/StatsCard';
 
 const Dashboard = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <Layout>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">

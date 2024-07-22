@@ -28,7 +28,7 @@ const Chart = () => {
       {
         label: 'In-Store Sales',
         data: [30],
-        backgroundColor: ['#6366F1'],
+        backgroundColor: ['#7E22CE'],
       },
     ],
   };
@@ -40,8 +40,8 @@ const Chart = () => {
         label: 'University Survey',
         data: [65, 59, 80, 81, 56, 55, 40],
         fill: false,
-        backgroundColor: '#6366F1',
-        borderColor: '#6366F1',
+        backgroundColor: '#7E22CE',
+        borderColor: '#7E22CE',
       },
     ],
   };

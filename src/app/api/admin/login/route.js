@@ -1,18 +1,21 @@
+import { createJWT } from "@/middleware/jwtHash";
 import { ResponseFailed, ResponseSuccess } from "@/middleware/Response";
-import jwt from 'jsonwebtoken';
 import { cookies } from "next/headers";
 
 
 
 export const POST = async(req)=>{
     const {username,password} = await req.json();
-    if(!username || !password) return ResponseFailed(400,'Please fill all the fields!');
+    if(!username || !password) return ResponseFailed(401,'Please fill all the fields!');
 
     try {    
-        const token = jwt.sign({username,password},process.env.JWT_SECRET);
+        if(username !== process.env.ADMIN_USERNAME || password !== process.env.ADMIN_PASSWORD) return ResponseFailed(401,'Invalid username or password!');
 
+
+        // const token = jwt.sign({username,password},process.env.JWT_SECRET); 
+        const token = createJWT({username,password});
         cookies().set({
-            name: "Admin-Token",
+            name: "Raithan_Admin_Token",
             value: token,
             httpOnly: true,
             maxAge: process.env.DAY_COOKIE*24 * 60 * 60,
@@ -21,29 +24,7 @@ export const POST = async(req)=>{
         return ResponseSuccess(200,'Admin Login Successfully',token);
 
     } catch (error) {
-        console.log('error in login admin==>',error);
-        return ResponseFailed(400,'Admin Login Failed');
-    }
-
-    
-}
-export const GET = async(req)=>{
-
-    try {    
-        const token = jwt.sign('{username,password}',process.env.JWT_SECRET);
-
-        cookies().set({
-            name: "token",
-            value: token,
-            httpOnly: true,
-            maxAge: process.env.DAY_COOKIE*24 * 60 * 60,
-          });
-
-        return ResponseSuccess(200,'Admin Login Successfully',token);
-
-    } catch (error) {
-        console.log('error in login admin==>',error);
-        return ResponseFailed(400,'Admin Login Failed');
+        return ResponseFailed(400,'Admin Login Failed',error);
     }
 
     

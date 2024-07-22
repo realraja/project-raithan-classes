@@ -17,3 +17,7 @@ export const ResponseFailed = (statusCode,message,data) =>{
         status:statusCode
     })
 }
+
+export const ResponseFailedError = (status, message, error) => {
+    return NextResponse.json({success:false, message, error }, { status });
+}
