@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import ConfirmButton from "../Dialogs/ConfirmButton";
 import AddStudent from "../Dialogs/AddStudent";
+import AddButton from "../Basics/AddButton";
 
 const Header = () => {
   const router = useRouter();
@@ -28,25 +29,11 @@ const Header = () => {
   return (<>
       <header className="bg-gray-900 text-white p-4 flex justify-end items-center gap-3">
         <div className="flex justify-center items-center gap-4 mx-3">
-          <button onClick={()=> setConfirmShowAdd(true)} className="active:scale-105 duration-75 inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-r from-rose-600 to-violet-500 group-hover:from-rose-600 group-hover:to-violet-500 hover:text-white dark:text-white  focus:outline-none ">
-            <span className="flex justify-center items-center px-8 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6 mr-2"
-              >
-                <path
+          <AddButton icon={<path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
-                />
-              </svg>
-              Add Student
-            </span>
-          </button>
+                />} runFunction={()=> setConfirmShowAdd(true)} text={"Add Student"} />
           <button
             onClick={() => setConfirmShowLogout(true)}
             className="active:scale-105 duration-75 inline-flex items-center justify-center text-white  overflow-hidden  font-medium  rounded-lg group bg-gradient-to-r from-purple-600 to-rose-500 group-hover:from-purple-600 group-hover:to-rose-500 hover:text-white  focus:outline-none "

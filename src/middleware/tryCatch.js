@@ -5,7 +5,7 @@ import { ResponseFailed, ResponseFailedError } from "./Response";
 export const adminTryCatch = (passedFunction) => async(req) => {
     try {
         const isAdmin = await AdminAuth(req);
-        if (!isAdmin) return ResponseFailed(400, "Please Login First", { isAdmin });
+        if (!isAdmin) return ResponseFailed(401, "Please Login First", { isAdmin });
 
         
         await connectDB();

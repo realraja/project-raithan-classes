@@ -20,15 +20,16 @@ const Sidebar = () => {
 </svg>
  Quizes
         </Link>
+        <Link href="/raithan-add/fees" className="flex items-center p-4 hover:bg-purple-800">
+          <CurrencyDollarIcon className="h-6 w-6 mr-2" /> Fees
+        </Link>
         <Link href="/raithan-add/subjects" className="flex items-center p-4 hover:bg-purple-800">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6 mr-2">
   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
 </svg>
  Subjects
         </Link>
-        <Link href="/raithan-add/fees" className="flex items-center p-4 hover:bg-purple-800">
-          <CurrencyDollarIcon className="h-6 w-6 mr-2" /> Fees
-        </Link>
+        
         <Link href="/raithan-add/courses" className="flex items-center p-4 hover:bg-purple-800">
           <BookOpenIcon className="h-6 w-6 mr-2" /> Courses
         </Link>

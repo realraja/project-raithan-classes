@@ -19,5 +19,5 @@ export const POST = adminTryCatch(async (req) => {
 
   const data = await Course.create({ name, createdDate });
 
-  return ResponseSuccess(201, "user created successfully", data);
+  return ResponseSuccess(201, "Course created successfully", data);
 });

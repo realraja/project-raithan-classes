@@ -4,7 +4,6 @@ import axios from "axios";
 
 
 
-const serverUrl = 'api/';
 
 // export const adminLogin = createAsyncThunk('register',async(formData,{rejectWithValue})=>{
 //   // console.log('post data===>',postData.email)
@@ -26,8 +25,9 @@ const serverUrl = 'api/';
 export const checkAdmin = createAsyncThunk('checkAdmin',async(args,{rejectWithValue})=>{
     // console.log('post data===>')
     try {
-      const {data} = await axios.get(`/api/admin`)
-          return data;
+      const {data} = await axios.get(`/api/admin/alldataget`);
+      // console.log(data);
+          return data.data;
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }

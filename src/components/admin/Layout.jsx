@@ -10,10 +10,8 @@ const Layout = ({ children }) => {
   const router = useRouter();
 
   const {isAdmin,loading} = useSelector(state => state.admin);
-
-  useEffect(() => {
   if(!isAdmin) return router.push('/raithan-add/login');  
-  }, [router,isAdmin])
+
   return (
     <div className="flex h-screen">
       <Sidebar />
