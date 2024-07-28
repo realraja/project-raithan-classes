@@ -1,5 +1,5 @@
 const { createSlice } = require("@reduxjs/toolkit");
-const { checkAdmin, adminLogin } = require("../actions/adminActions");
+const { checkAdmin } = require("../actions/adminActions");
 
 
 
@@ -33,6 +33,11 @@ const admin = createSlice({name: "admin",initialState:{isAdmin:false},reducers:{
             // console.log(action)
               state.loading = false;
               state.isAdmin = false;
+              state.users = null;
+            state.courses = null;
+            state.subjects =null;
+            state.quizes = null;
+            state.questions =null;
               state.error = action.payload;
           })
 }})

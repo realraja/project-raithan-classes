@@ -1,9 +1,6 @@
 "use client";
-import Layout from "@/components/admin/Layout";
 import AddQuestion from "@/components/Dialogs/AddQuestion";
-import AddQuiz from "@/components/Dialogs/AddQuiz";
 import moment from "moment";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -23,7 +20,7 @@ const Page = ({params}) => {
   if (!mounted) return null;
 
   return (
-    <Layout>
+    <>
       <div className="w-full flex flex-col flex-wrap justify-center gap-5 p-4 cursor-pointer">
 
         <AddButton
@@ -47,7 +44,7 @@ const Page = ({params}) => {
       </div>
 
       <AddQuestion isOpen={confirmShowAdd} setIsOpen={setConfirmShowAdd} quiz={id}  />
-    </Layout>
+    </>
   );
 };
 

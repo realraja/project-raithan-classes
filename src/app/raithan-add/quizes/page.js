@@ -1,5 +1,4 @@
 "use client";
-import Layout from "@/components/admin/Layout";
 import AddButton from "@/components/Basics/AddButton";
 import AddQuiz from "@/components/Dialogs/AddQuiz";
 import moment from "moment";
@@ -22,7 +21,7 @@ const Page = () => {
   if (!mounted) return null;
 
   return (
-    <Layout>
+    <>
       <div className="flex flex-col items-center">
         <AddButton
           icon={
@@ -49,7 +48,7 @@ const Page = () => {
         confirmState={confirmShowAdd}
         setConfirmState={setConfirmShowAdd}
       />
-    </Layout>
+    </>
   );
 };
 
