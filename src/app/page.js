@@ -1,9 +1,43 @@
-
+"use client";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 export default function Home() {
+  const {quizes} = useSelector(state => state.user);
+  // console.log(quizes)
   return (
-    <div>
-      Home
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">My Quizzes</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {quizes && quizes.map((i) => (
+          <QuizCard key={i._id} quiz={i} />
+        ))}
+      </div>
     </div>
   );
 }
+
+
+const QuizCard = ({ quiz }) => {
+  return (
+    <div className="border p-4 rounded-lg shadow-md bg-white">
+      <div className="flex justify-between items-center mb-2">
+        <h3 className="text-lg font-semibold text-black">{quiz.name}</h3>
+        <button className="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M6 10a2 2 0 114 0 2 2 0 01-4 0zm4-7a7 7 0 100 14 7 7 0 000-14z" />
+          </svg>
+        </button>
+      </div>
+      <p className="text-sm text-gray-600">{quiz?.questions.length} question(s)</p>
+      <div className="flex justify-between items-center mt-4">
+        <span className="text-sm text-gray-500">Success rate: {quiz.successRate}%</span>
+        <button className="bg-green-500 text-white rounded-full p-2 hover:bg-green-600">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 9a1 1 0 00-1 1v4a1 1 0 102 0v-4a1 1 0 00-1-1zM10 5a1 1 0 00-1 1v2a1 1 0 102 0V6a1 1 0 00-1-1z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+};

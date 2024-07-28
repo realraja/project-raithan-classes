@@ -14,12 +14,7 @@ export const GET = userTryCatch(async(req)=>{
             Course.find({subscribers:req.id}),
         ])
 
-        const quizData = courses.map(async(i)=>{
-            const quiz = await Quiz.find({forCourse:i._id}).populate('questions').populate('forSubject', '_id name')
-            return quiz;
-        })
+        const quiz = await Quiz.find({forCourse:courses[0]._id}).populate('questions').populate('forSubject', '_id name')
 
-        const allQuiz = await Promise.all(quizData);
-
-        return ResponseSuccess(200,"all Data successfully get",{ user,courses,quizes:allQuiz });
+        return ResponseSuccess(200,"all Data successfully get",{ user,courses,quizes:quiz });
 })

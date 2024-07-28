@@ -77,6 +77,7 @@ const LoginPage = () => {
               placeholder="Enter your password"
               className="w-full px-3 py-2 bg-gray-900 border rounded-lg focus:outline-none"
               required
+              autoComplete={username}
             />
           </div>
           <motion.button

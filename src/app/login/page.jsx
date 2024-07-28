@@ -11,7 +11,6 @@ import { SyncLoader } from 'react-spinners';
 const LoginPage = () => {
   const router = useRouter();
   const {isUser} = useSelector(state => state.user);
-  console.log(isUser);
   const dispatch = useDispatch();
 
   const [phone, setPhone] = useState('');

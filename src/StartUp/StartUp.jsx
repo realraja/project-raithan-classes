@@ -12,7 +12,7 @@ const StartUp = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(checkAdmin());
+    pathname.split("/")[1] === "raithan-add" && dispatch(checkAdmin());
     dispatch(checkUser());
   }, [dispatch]);
 

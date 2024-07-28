@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 const ForgotPasswordPage = () => {
-  const adminPhoneNumber = '800-5760-975'; // Replace with the actual admin phone number
+  const adminPhoneNumber = '800-5760-985'; // Replace with the actual admin phone number
 
   const handleCallAdmin = () => {
     window.location.href = `tel:${adminPhoneNumber}`;

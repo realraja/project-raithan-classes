@@ -30,7 +30,6 @@ const admin = createSlice({name: "admin",initialState:{isAdmin:false},reducers:{
             state.questions = action.payload.questions;
           })
           .addCase(checkAdmin.rejected, (state, action) => {
-            // console.log(action)
               state.loading = false;
               state.isAdmin = false;
               state.users = null;
@@ -38,7 +37,7 @@ const admin = createSlice({name: "admin",initialState:{isAdmin:false},reducers:{
             state.subjects =null;
             state.quizes = null;
             state.questions =null;
-              state.error = action.payload;
+            state.error = action.payload;
           })
 }})
 
