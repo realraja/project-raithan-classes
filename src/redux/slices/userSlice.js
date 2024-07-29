@@ -5,9 +5,12 @@ const { createSlice } = require("@reduxjs/toolkit");
 
 
 const user = createSlice({name: "user",initialState:{isUser:false},reducers:{
-    loginActionUser:(state)=>{
+    getUserQuiz:(state,action)=>{
+      // console.log(action.payload.data)
         state.loading = false;
         state.isUser = true;
+        state.quizes = action.payload.data;
+
     },
     logoutActionUser:(state)=>{
         state.loading = false;
@@ -39,6 +42,6 @@ const user = createSlice({name: "user",initialState:{isUser:false},reducers:{
 }})
 
 
-export const {loginActionUser,logoutActionUser} =user.actions;
+export const {getUserQuiz,logoutActionUser} =user.actions;
 
 export default user.reducer;

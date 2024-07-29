@@ -1,11 +1,38 @@
 "use client";
-import React from 'react';
-import { useSelector } from 'react-redux';
+import SelectCourse from '@/components/user/SelectCourse';
+import { getUserQuiz } from '@/redux/slices/userSlice';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
-  const {quizes} = useSelector(state => state.user);
-  // console.log(quizes)
-  return (
+  const dispatch = useDispatch();
+  const {quizes,courses} = useSelector(state => state.user);
+  const [selectedCourse, setSelectedCourse ] = useState({})
+
+  const getQuizes = async()=>{
+    try {
+      const {data} = await axios.post('/api/user/get-quiz-data',{courseId:selectedCourse._id});
+      await dispatch(getUserQuiz(data));
+      // console.log(data);
+
+    } catch (error) {
+      console.log(error);
+      error.response ?toast.error(error.response.data.message):toast.error(error.message);
+    }
+  }
+  
+  
+  useEffect(()=>{
+    getQuizes();
+  },[selectedCourse,setSelectedCourse])
+  return (<div className='App'>
+    <div>
+  <SelectCourse data={courses} setSelectedData={setSelectedCourse} />
+  <SelectCourse data={courses && courses[0]?.subjects} setSelectedData={()=>{}}  />
+
+    </div>
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">My Quizzes</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -13,6 +40,7 @@ export default function Home() {
           <QuizCard key={i._id} quiz={i} />
         ))}
       </div>
+    </div>
     </div>
   );
 }
