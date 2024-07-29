@@ -27,7 +27,7 @@ export default function Home() {
   
   useEffect(()=>{
     getQuizes();
-  },[selectedCourse,setSelectedCourse])
+  },[selectedCourse,setSelectedCourse,getQuizes])
   return (<div className='App'>
     <div className='items-center mx-20'>
 { courses && <SelectCourse data={courses} setSelectedData={setSelectedCourse} />}

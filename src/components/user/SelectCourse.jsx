@@ -17,7 +17,7 @@ const SelectCourse = ({data = courses,setSelectedData}) => {
  
 useEffect(()=>{
     setSelectedData(selected);
-},[selected, setSelected]);
+},[selected, setSelected,setSelectedData]);
   return (
       <Listbox value={selected} onChange={setSelected}>
         {({ open }) => (
