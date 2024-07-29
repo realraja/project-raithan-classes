@@ -10,7 +10,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const {quizes,courses} = useSelector(state => state.user);
   const [selectedCourse, setSelectedCourse ] = useState({})
-  console.log(courses)
+  // console.log(selectedCourse)
 
   const getQuizes = async()=>{
     try {
