@@ -14,7 +14,7 @@ const StartUp = ({ children }) => {
   useEffect(() => {
     pathname.split("/")[1] === "raithan-add" && dispatch(checkAdmin());
     dispatch(checkUser());
-  }, [dispatch,pathname]);
+  }, [dispatch]);
 
   if (
     pathname.split("/")[1] === "raithan-add" &&
