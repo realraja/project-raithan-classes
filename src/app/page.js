@@ -10,6 +10,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const {quizes,courses} = useSelector(state => state.user);
   const [selectedCourse, setSelectedCourse ] = useState({})
+  console.log(courses)
 
   const getQuizes = async()=>{
     try {
@@ -28,9 +29,9 @@ export default function Home() {
     getQuizes();
   },[selectedCourse,setSelectedCourse])
   return (<div className='App'>
-    <div>
-  <SelectCourse data={courses} setSelectedData={setSelectedCourse} />
-  <SelectCourse data={courses && courses[0]?.subjects} setSelectedData={()=>{}}  />
+    <div className='items-center mx-20'>
+{ courses && <SelectCourse data={courses} setSelectedData={setSelectedCourse} />}
+  {/* {courses && courses[0].subjects.length>0 && <SelectCourse data={courses[0].subjects} setSelectedData={(data)=>{console.log(data)}}  />} */}
 
     </div>
     <div className="container mx-auto p-4">
