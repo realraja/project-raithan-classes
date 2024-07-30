@@ -50,7 +50,7 @@ export default function Home() {
 
 const QuizCard = ({ quiz }) => {
   return (
-    <Link href={quiz._id}>
+    <Link href={`/start-quiz/${quiz._id}`}>
     <div className="border p-4 rounded-lg shadow-md bg-white">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-semibold text-black">{quiz.name}</h3>

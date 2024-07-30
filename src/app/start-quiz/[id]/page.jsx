@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import Notfound from '../not-found';
+import Notfound from '../../not-found';
 import Quiz from '@/components/user/Quiz';
 
-const page = ({params}) => {
+const Page = ({params}) => {
     const quizId = params.id;
     const {quizes} = useSelector(state => state.user);
 
@@ -28,4 +28,4 @@ const page = ({params}) => {
   )
 }
 
-export default page
+export default Page
