@@ -2,16 +2,28 @@ import mongoose, { Schema, Types, model } from "mongoose";
 
 const schema = new Schema(
   {
+    questionUrl: String,
     question: String,
     options: {
-      a: String,
-      b: String,
-      c: String,
-      d: String,
+      a: {
+        type: String,
+        default: "A",
+      },
+      b: {
+        type: String,
+        default: "B",
+      },
+      c: {
+        type: String,
+        default: "C",
+      },
+      d: {
+        type: String,
+        default: "D",
+      },
       e: {
         type: String,
         default: "Not Attempted",
-        required: true,
       },
     },
     answer: {
@@ -19,7 +31,7 @@ const schema = new Schema(
       enum: ["a", "b", "c", "d"],
       required: true,
     },
-    timer: {type:Number,default:3},
+    timer: {type:Number,default:2},
     for: [
       {
         type: Types.ObjectId,
@@ -33,6 +45,11 @@ const schema = new Schema(
         id: {
           type: Types.ObjectId,
           ref: "User",
+        },
+        choosed:{
+          type: String,
+          enum: ["a", "b", "c", "d","e"],
+          required: true,
         },
         result: {
           type: String,

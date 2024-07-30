@@ -20,7 +20,7 @@ export const adminTryCatch = (passedFunction) => async(req) => {
 export const userTryCatch = (passedFunction) => async(req) => {
     try {
         const User = await UserAuth(req);
-        if (!User) return ResponseFailed(400, "Please Login First", { User });
+        if (!User) return ResponseFailed(401, "Please Login First", { User });
 
         req.id = User._id;
 

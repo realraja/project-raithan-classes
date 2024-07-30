@@ -2,6 +2,7 @@
 import SelectCourse from '@/components/user/SelectCourse';
 import { getUserQuiz } from '@/redux/slices/userSlice';
 import axios from 'axios';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,6 +50,7 @@ export default function Home() {
 
 const QuizCard = ({ quiz }) => {
   return (
+    <Link href={quiz._id}>
     <div className="border p-4 rounded-lg shadow-md bg-white">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-semibold text-black">{quiz.name}</h3>
@@ -68,5 +70,6 @@ const QuizCard = ({ quiz }) => {
         </button>
       </div>
     </div>
+    </Link>
   );
 };
