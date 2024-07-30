@@ -1,4 +1,5 @@
 "use client"
+import { useRouter } from 'next/navigation';
 import { useState, useRef } from 'react';
 
 export default function Camera() {
@@ -6,6 +7,8 @@ export default function Camera() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null); // To store the video stream
+
+  const router = useRouter();
 
   const startCamera = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -28,6 +31,29 @@ export default function Camera() {
 
   return (
     <div>
+      <div className='flex justify-center items-center p-5 m-5 gap-5'>
+      <button onClick={()=> router.push('/01-test-image/test2')} className="active:scale-105 h-14 duration-75 inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium rounded-lg group bg-gradient-to-r from-rose-600 to-violet-500 group-hover:from-rose-600 group-hover:to-violet-500 hover:text-white dark:text-white  focus:outline-none ">
+            <span className="flex justify-center w-full h-full items-center px-5 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            
+              <p className='text-lg font-normal'>test choose and camara</p>
+              
+            </span>
+          </button>
+      <button onClick={()=> router.push('/01-test-image/test3')} className="active:scale-105 h-14 duration-75 inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium rounded-lg group bg-gradient-to-r from-rose-600 to-violet-500 group-hover:from-rose-600 group-hover:to-violet-500 hover:text-white dark:text-white  focus:outline-none ">
+            <span className="flex justify-center w-full h-full items-center px-5 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            
+              <p className='text-lg font-normal'>test capture and camara</p>
+              
+            </span>
+          </button>
+      <button onClick={()=> router.push('/01-test-image/test4')} className="active:scale-105 h-14 duration-75 inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium rounded-lg group bg-gradient-to-r from-rose-600 to-violet-500 group-hover:from-rose-600 group-hover:to-violet-500 hover:text-white dark:text-white  focus:outline-none ">
+            <span className="flex justify-center w-full h-full items-center px-5 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            
+              <p className='text-lg font-normal'>test capture and camara</p>
+              
+            </span>
+          </button>
+      </div>
       <h1>Camera App</h1>
       <div>
         <video ref={videoRef} style={{ display: imageSrc ? 'none' : 'block' }} width="400" height="300"></video>
