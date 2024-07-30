@@ -12,9 +12,10 @@ const StartUp = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log(pathname);
     pathname.split("/")[1] === "raithan-add" && dispatch(checkAdmin());
     dispatch(checkUser());
-  }, [dispatch]);
+  }, [dispatch,pathname]);
 
   if (
     pathname.split("/")[1] === "raithan-add" &&
