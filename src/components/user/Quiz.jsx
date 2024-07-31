@@ -103,7 +103,7 @@ export default function Quiz({questions = questionss}) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestion,handleNext]);
+  }, [currentQuestion]);
 
   useEffect(() => {
     if (timeLeft === 0) handleNext();
