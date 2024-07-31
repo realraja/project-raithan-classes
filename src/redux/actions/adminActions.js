@@ -33,3 +33,14 @@ export const checkAdmin = createAsyncThunk('checkAdmin',async(args,{rejectWithVa
     }
 })
 
+
+// export const checkAdmin = createAsyncThunk('checkAdmin',async(args,{rejectWithValue})=>{
+//   // console.log('post data===>')
+//   try {
+//     const {data} = await axios.get(`/api/admin`);
+//     // console.log(data);
+//         return data.data;
+//   } catch (error) {
+//     return rejectWithValue(error.response.data.message);
+//   }
+// })

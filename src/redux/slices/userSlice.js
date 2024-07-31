@@ -15,6 +15,10 @@ const user = createSlice({name: "user",initialState:{isUser:false},reducers:{
     logoutActionUser:(state)=>{
         state.loading = false;
         state.isUser = false;
+
+        
+        state.courses = action.payload.courses;
+        state.quizes = action.payload.quizes;
     },
 },extraReducers(builder){
     builder
@@ -27,8 +31,6 @@ const user = createSlice({name: "user",initialState:{isUser:false},reducers:{
         state.isUser = true;
         state.message = action.payload.message;
         state.user = action.payload.user;
-        state.courses = action.payload.courses;
-        state.quizes = action.payload.quizes;
       })
       .addCase(checkUser.rejected, (state, action) => {
         // console.log(action)

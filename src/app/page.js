@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
   const dispatch = useDispatch();
-  const {quizes,courses} = useSelector(state => state.user);
+  const {quizes,user} = useSelector(state => state.user);
   const [selectedCourse, setSelectedCourse ] = useState({})
   // console.log(selectedCourse)
 
@@ -31,7 +31,7 @@ export default function Home() {
   },[selectedCourse,setSelectedCourse])
   return (<div className='App'>
     <div className='items-center mx-20'>
-{ courses && <SelectCourse data={courses} setSelectedData={setSelectedCourse} />}
+{ user?.courses && <SelectCourse data={user.courses} setSelectedData={setSelectedCourse} />}
   {/* {courses && courses[0].subjects.length>0 && <SelectCourse data={courses[0].subjects} setSelectedData={(data)=>{console.log(data)}}  />} */}
 
     </div>

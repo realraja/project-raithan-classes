@@ -11,23 +11,24 @@ const Page = ({ params }) => {
   const [quiz, setQuiz] = useState(null);
 
   useEffect(() => {
-    console.log('quizId:', quizId);
-    console.log('quizes:', quizes);
+    // console.log('quizId:', quizId);
+    // console.log('quizes:', quizes);
 
     if (quizes) {
       const foundQuiz = quizes.find((i) => i._id === quizId);
-      console.log('foundQuiz:', foundQuiz);
+      // console.log('foundQuiz:', foundQuiz);
       setQuiz(foundQuiz);
+      // console.log(foundQuiz)
     }
   }, [quizId, quizes]);
 
-  if (!quiz) {
+  if (!quiz || quiz?.questions.length < 1) {
     return <Notfound />;
   }
 
   return (
     <div>
-      <Quiz questions={quiz.questions} />
+      {quiz && quiz.questions.length > 0 && <Quiz questions={quiz.questions} name={quiz.name} quizId={quiz._id} />}
     </div>
   );
 };
