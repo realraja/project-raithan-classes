@@ -47,11 +47,11 @@ const Chart = () => {
   };
 
   return (
-    <div className="flex gap-4">
-      <div className="bg-gray-800 text-white p-4 shadow rounded-lg w-2/5">
+    <div className="flex max-sm:flex-col max-sm:justify-center max-sm:items-center gap-4 ">
+      <div className="bg-gray-800 text-white p-4 shadow rounded-lg w-2/5 max-sm:w-full">
         <Doughnut data={doughnutData} />
       </div>
-      <div className="bg-gray-800 text-white p-4 shadow rounded-lg w-3/5">
+      <div className="bg-gray-800 text-white p-4 shadow rounded-lg w-3/5 max-sm:w-full">
         <Line data={lineData} />
       </div>
     </div>

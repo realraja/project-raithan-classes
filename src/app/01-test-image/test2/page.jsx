@@ -18,7 +18,10 @@ const CropImage = () => {
   const captureImage = () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
+      console.log('Captured image:', imageSrc);
       setImageSrc(imageSrc);
+    } else {
+      console.log('Webcam is not ready');
     }
   };
 

@@ -2,6 +2,7 @@ import { adminTryCatch } from "@/middleware/tryCatch";
 import { Question } from "@/models/questions";
 import { Quiz } from "@/models/quizes";
 const { ResponseFailed, ResponseSuccess } = require("@/middleware/Response");
+import cloudinary from "@/lib/cloudinary";
 
 export const POST = adminTryCatch(async (req) => {
   const {questionUrl, question, answer , options,quiz,timer } = await req.json();
@@ -14,7 +15,11 @@ export const POST = adminTryCatch(async (req) => {
 
 
   if(questionUrl){
-    const data = await Question.create({ questionUrl, answer, for:[quiz] ,timer});   
+    const uploadResponse = await cloudinary.uploader.upload(questionUrl, {
+      folder: 'raithan'
+    });
+
+    const data = await Question.create({ questionUrl:uploadResponse.secure_url, answer, for:[quiz] ,timer});   
     
       await quizUpdate.questions.push(data._id);
       await quizUpdate.save(); 
