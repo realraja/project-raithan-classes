@@ -4,21 +4,31 @@ const { createSlice } = require("@reduxjs/toolkit");
 
 
 
-const user = createSlice({name: "user",initialState:{isUser:false},reducers:{
+const user = createSlice({name: "user",initialState:{isUser:false,loading:true},reducers:{
     getUserQuiz:(state,action)=>{
       // console.log(action.payload.data)
         state.loading = false;
         state.isUser = true;
-        state.quizes = action.payload.data;
+        state.quizes = action.payload;
 
     },
-    logoutActionUser:(state)=>{
+    setLoadingFalse:(state,action)=>{
+      // console.log(action.payload.data)
+        state.loading = false;
+
+    },
+    loginAction:(state,action)=>{
+      // console.log(action.payload)
+        state.loading = false;
+        state.isUser = true;
+        state.user = action.payload;
+
+    },
+    logoutAction:(state)=>{
         state.loading = false;
         state.isUser = false;
-
-        
-        state.courses = action.payload.courses;
-        state.quizes = action.payload.quizes;
+        state.user = null;
+        state.quizes = null;
     },
 },extraReducers(builder){
     builder
@@ -44,6 +54,6 @@ const user = createSlice({name: "user",initialState:{isUser:false},reducers:{
 }})
 
 
-export const {getUserQuiz,logoutActionUser} =user.actions;
+export const {getUserQuiz,logoutAction,loginAction,setLoadingFalse} =user.actions;
 
 export default user.reducer;

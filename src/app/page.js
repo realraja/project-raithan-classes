@@ -1,6 +1,7 @@
 "use client";
 import SelectCourse from '@/components/user/SelectCourse';
 import { getUserQuiz } from '@/redux/slices/userSlice';
+import { GetQuizesData } from '@/utils/UserActions';
 import axios from 'axios';
 import moment from 'moment';
 import Link from 'next/link';
@@ -12,24 +13,33 @@ export default function Home() {
   const dispatch = useDispatch();
   const {quizes,user} = useSelector(state => state.user);
   const [selectedCourse, setSelectedCourse ] = useState({})
-  // console.log(selectedCourse)
+  // console.log(user);
 
-  const getQuizes = async()=>{
-    try {
-      const {data} = await axios.post('/api/user/get-quiz-data',{courseId:selectedCourse._id});
-      await dispatch(getUserQuiz(data));
-      // console.log(data);
+  // const getQuizes = async()=>{
+  //   try {
+  //     const {data} = await axios.post('/api/user/get-quiz-data',{courseId:selectedCourse._id});
+  //     await dispatch(getUserQuiz(data));
+  //     // console.log(data);
 
-    } catch (error) {
-      console.log(error);
-      error.response ?toast.error(error.response.data.message):toast.error(error.message);
-    }
-  }
+  //   } catch (error) {
+  //     console.log(error);
+  //     error.response ?toast.error(error.response.data.message):toast.error(error.message);
+  //   }
+  // }
   
   
   useEffect(()=>{
-    getQuizes();
-  },[selectedCourse,setSelectedCourse])
+    return async()=>{
+      const data = await GetQuizesData({courseId:selectedCourse._id || user?.courses[0]._id});
+      // console.log(data);
+      if(data.success){
+        dispatch(getUserQuiz(data.data));
+        // toast.success(data.message);
+      }else{
+        toast.error(data.message);
+      }
+    }
+  },[selectedCourse,setSelectedCourse,user])
   return (<div className='App'>
     <div className='items-center mx-20'>
 { user?.courses && <SelectCourse data={user.courses} setSelectedData={setSelectedCourse} />}

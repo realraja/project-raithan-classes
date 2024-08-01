@@ -7,22 +7,24 @@ import {  useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import ConfirmButton from '../Dialogs/ConfirmButton';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
-import { checkUser } from '@/redux/actions/userActions';
+import { CheckUser } from '@/utils/UserActions';
+import { loginAction, logoutAction, setLoadingFalse } from '@/redux/slices/userSlice';
 
 const Navbar = () => {
+  const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
   const {isAdmin} = useSelector(state => state.admin);
-  const {isUser} = useSelector(state => state.user);
+  // const {isUser} = useSelector(state => state.user);
   
   const [isOpen, setIsOpen] = useState(false);
   
     const logoutHandle = async ()=>{
       try {
         const {data} = await axios.get('/api/logout');
-        await dispatch(checkUser());
+        await dispatch(logoutAction());
         toast.success(data.message);
       } catch (error) {
         console.log(error);
@@ -32,11 +34,26 @@ const Navbar = () => {
 
 
     useEffect(() =>{      
-      if(!isUser) return router.push('/login');
-    },[router,isUser]);
+      return async()=>{
+        const data = await CheckUser();
+        // console.log("data======>",data);
+        if(data.success){
+          await dispatch(loginAction(data.data.user));
+          toast.success('User Verified Successfully');
+        }else{
+          dispatch(setLoadingFalse());
+          toast.error(data.message);
+          router.push('/login');
+        }
+      }
+    },[router]);
 
   return (
-    <nav className="bg-gray-800 w-full sticky top-0 z-50">
+    <nav className={`bg-gray-800 w-full sticky top-0 z-50 ${pathname.split("/")[2] !== "login" &&
+      pathname.split("/")[1] !== "admin-login" &&
+      pathname.split("/")[1] !== "forget-password" &&
+      // pathname.split("/")[1] !== "start-quiz" &&
+      pathname.split("/")[1] !== "login" || "hidden"}`}>
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
          

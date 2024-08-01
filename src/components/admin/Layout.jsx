@@ -2,21 +2,36 @@
 import React, { useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { GridLoader } from 'react-spinners';
 import Navbar from './Navbar';
+import { loginAction } from '@/redux/slices/adminSlice';
+import toast from 'react-hot-toast';
+import { CheckAdmin } from '@/utils/AdminActions';
 
 const Layout = ({ children }) => {
 
   const router = useRouter();
 
-  const {isAdmin,loading} = useSelector(state => state.admin);
+  const dispatch = useDispatch();
+  const {loading} = useSelector(state => state.admin);
 
   useEffect(() => {
-  
-    if(!isAdmin) return router.push('/raithan-add/login');  
-  }, [isAdmin,router])
+
+    return async()=>{
+      const data = await CheckAdmin();
+      // console.log("data",data);
+      if(data.success){
+        dispatch(loginAction());
+        toast.success(data.message);
+      }else{
+        toast.error(data.message);
+       router.push('/raithan-add/login'); 
+      }
+    }
+   
+  }, [router])
 
   return (
     <div className="flex h-screen">

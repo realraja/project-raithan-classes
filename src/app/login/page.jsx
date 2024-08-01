@@ -1,5 +1,7 @@
 "use client"
 import { checkUser } from '@/redux/actions/userActions';
+import { loginAction } from '@/redux/slices/userSlice';
+import { LoginUser } from '@/utils/UserActions';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -20,20 +22,19 @@ const LoginPage = () => {
 
   const LoginHandler = async(e) =>{
     e.preventDefault();
-    try {
-      setButtonLoading(true);
-      const {data} = await axios.post('/api/login',{
-        phone,password
-      })
-      setButtonLoading(false);
+
+    setButtonLoading(true);
+    const data = await LoginUser({phone,password});
+    console.log(data);
+    if(data.success){
       toast.success(data.message);
-      await dispatch(checkUser());
+      await dispatch(loginAction(data.data.user));
       router.push('/')
-    } catch (error) {
-      setButtonLoading(false);
-      console.log(error);
-      error.response ?toast.error(error.response.data.message):toast.error(error.message);
-    }
+    }else{
+      toast.error(data.message);
+    }    
+    setButtonLoading(false);
+    
   }
 
   useEffect(()=>{

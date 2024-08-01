@@ -1,21 +1,20 @@
 "use client";
 import Layout from "@/components/admin/Layout";
 import Navbar from "@/components/user/Navbar";
-import { checkAdmin } from "@/redux/actions/adminActions";
-import { checkUser } from "@/redux/actions/userActions";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { GridLoader } from "react-spinners";
 
 const StartUp = ({ children }) => {
   const pathname = usePathname();
-  const dispatch = useDispatch();
+  const userLoading = useSelector(state=> state.user).loading;
 
-  useEffect(() => {
-    console.log(pathname);
-    pathname.split("/")[1] === "raithan-add" && dispatch(checkAdmin());
-    dispatch(checkUser());
-  }, [dispatch,pathname]);
+  // useEffect(() => {
+  //   console.log(pathname);
+  //   // pathname.split("/")[1] === "raithan-add" && dispatch(checkAdmin());
+  //   dispatch(checkUser());
+  // }, [dispatch,pathname]);
 
   if (
     pathname.split("/")[1] === "raithan-add" &&
@@ -27,12 +26,14 @@ const StartUp = ({ children }) => {
 
   return (
     <>
-      {pathname.split("/")[2] !== "login" &&
-        pathname.split("/")[1] !== "admin-login" &&
-        pathname.split("/")[1] !== "forget-password" &&
-        // pathname.split("/")[1] !== "start-quiz" &&
-        pathname.split("/")[1] !== "login" && <Navbar />}
-      {children}
+       <Navbar />
+      {userLoading?<div  className='h-full flex justify-center items-center'><GridLoader
+  color="#a13bda"
+  loading
+  margin={30}
+  size={50}
+  speedMultiplier={3}
+/> </div> :children}
     </>
   );
 };

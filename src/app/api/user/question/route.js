@@ -10,7 +10,7 @@ export const PUT = userTryCatch(async (req) => {
 
   if(!question) return ResponseFailed(400,'question not found');
 
-  question.users = question.users.filter(user => user.id === req.id);
+  question.users = question.users.filter(user => user.id.toString() !== req.id.toString());
 
   question.users.push({
     id: req.id,
