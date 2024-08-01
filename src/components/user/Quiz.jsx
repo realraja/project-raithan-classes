@@ -91,7 +91,7 @@ const questionss = [
   },
 ];
 
-export default function Quiz({ questions = questionss, name ,quizId}) {
+export default function Quiz({ questions = questionss, name ,quizId,userId}) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState(
     new Array(questions.length).fill(null)
@@ -123,6 +123,44 @@ export default function Quiz({ questions = questionss, name ,quizId}) {
       handleNext()};
   }, [timeLeft]);
 
+  useEffect(() => {
+    
+    const newSelections = [...selectedOptions];
+  questions.map((i,j)=>{
+    const userAnswer = i.users.find(user => user.id === userId)?.choosed;
+    console.log(userAnswer)
+
+    if(userAnswer){
+      if (j < questions.length - 1) {
+        setCurrentQuestion(j+1);
+        setTimeLeft(questions[j].timer*60); // reset timer for next question
+      }
+      switch (userAnswer) {
+      case 'a':
+        newSelections[j] = 0;
+        setSelectedOptions(newSelections);        
+        break;
+      case 'b':
+        newSelections[j] = 1;
+        setSelectedOptions(newSelections);        
+        break;
+      case 'c':
+        newSelections[j] = 2;
+        setSelectedOptions(newSelections);        
+        break;
+      case 'd':
+        newSelections[j] = 3;
+        setSelectedOptions(newSelections);        
+        break;
+    
+      default:
+        newSelections[j] = 4;
+        setSelectedOptions(newSelections);  
+        break;
+    }}
+  })
+  }, [questions])
+
   const handleOptionSelect = (index) => {
     const newSelections = [...selectedOptions];
     newSelections[currentQuestion] = index;
@@ -131,13 +169,17 @@ export default function Quiz({ questions = questionss, name ,quizId}) {
   };
 
   const handleNext = () => {
+    const selectedOptionKey = Object.keys(questions[currentQuestion].options)[selectedOptions[currentQuestion]];
+     
+    // console.log(questions[currentQuestion].answer === selectedOptionKey);
+    
+    UpdateQuestion({questionId:questions[currentQuestion]._id,option:selectedOptionKey});
+
+
+
     if (currentQuestion < questions.length - 1) {
 
-      const selectedOptionKey = Object.keys(questions[currentQuestion].options)[selectedOptions[currentQuestion]];
-     
-      console.log(questions[currentQuestion].answer === selectedOptionKey);
-      
-      UpdateQuestion({questionId:questions[currentQuestion]._id,option:selectedOptionKey});
+
 
       setCurrentQuestion(currentQuestion + 1);
       setTimeLeft(questions[currentQuestion].timer*60); // reset timer for next question
@@ -326,7 +368,10 @@ const Result = ({ score, totalQuestions, correctAnswers, incorrectAnswers, notAt
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4">
       <div className="text-center">
-        <div className="text-6xl mb-4">😃</div>
+      <div className="text-6xl mb-4 text-yellow-400 text-center flex justify-center" ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-28">
+  <path fillRule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.658-.744 49.22 49.22 0 0 0-6.093-.377c-2.063 0-4.096.128-6.093.377a.75.75 0 0 0-.657.744Zm0 2.629c0 1.196.312 2.32.857 3.294A5.266 5.266 0 0 1 3.16 5.337a45.6 45.6 0 0 1 2.006-.343v.256Zm13.5 0v-.256c.674.1 1.343.214 2.006.343a5.265 5.265 0 0 1-2.863 3.207 6.72 6.72 0 0 0 .857-3.294Z" clipRule="evenodd" />
+</svg>
+</div>
         <h1 className="text-4xl font-bold mb-2">Your Score</h1>
         <h2 className="text-2xl mb-4">{score}/{totalQuestions}</h2>
         <Link href={'/'}>

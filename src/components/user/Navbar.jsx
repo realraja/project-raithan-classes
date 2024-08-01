@@ -36,7 +36,7 @@ const Navbar = () => {
     },[router,isUser]);
 
   return (
-    <nav className="bg-gray-800 w-full">
+    <nav className="bg-gray-800 w-full sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
          

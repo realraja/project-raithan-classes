@@ -26,8 +26,9 @@ const LoginPage = () => {
         phone,password
       })
       setButtonLoading(false);
-      await dispatch(checkUser());
       toast.success(data.message);
+      await dispatch(checkUser());
+      router.push('/')
     } catch (error) {
       setButtonLoading(false);
       console.log(error);

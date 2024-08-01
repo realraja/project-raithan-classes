@@ -7,37 +7,40 @@ import { checkAdmin } from "@/redux/actions/adminActions";
 import toast from "react-hot-toast";
 import axios from "axios";
 import ChooseMethod from "../ImageDialog/ChooseMethod";
+import ConfirmButton from "./ConfirmButton";
 
-const AddQuestion = ({ isOpen, setIsOpen, quiz }) => {
-  const [question, setQuestion] = useState("");
-  const [options, setOptions] = useState({ a: "", b: "", c: "", d: "" });
-  const [answer, setAnswer] = useState("");
-  const [timer, setTimer] = useState("2");
-  const [questionUrl, setQuestionUrl] = useState('');
+const EditQuestion = ({ isOpen, setIsOpen, quiz ,questionData}) => {
+  const [question, setQuestion] = useState(questionData.question);
+  const [options, setOptions] = useState(questionData.options);
+  const [answer, setAnswer] = useState(questionData.answer);
+  const [timer, setTimer] = useState(questionData.timer);
+  const [questionUrl, setQuestionUrl] = useState(questionData.questionUrl);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("image");
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [activeTab, setActiveTab] = useState(questionData.questionUrl?"image":"details");
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post("/api/admin/question", {
+      const { data } = await axios.put("/api/admin/question", {
        question,
         answer,
-        quiz,
+        questionId:questionData._id,
         timer,
         options:activeTab === "details" && options,
         questionUrl:activeTab !== "details" && questionUrl,
       });
 
-      // console.log(data);
+      console.log(data);
 
-      await dispatch(checkAdmin());
-      toast.success(data.message);
-      setIsOpen(false);
-      setLoading(false);
+    setIsOpen(false);
+    setLoading(false);
+    await dispatch(checkAdmin());
+    toast.success(data.message);
     } catch (error) {
       console.log(error);
       error.response
@@ -46,6 +49,26 @@ const AddQuestion = ({ isOpen, setIsOpen, quiz }) => {
       setLoading(false);
     }
   };
+
+  const handleDelete =async(e) =>{
+    setLoadingDelete(true);
+    try {
+        const { data } = await axios.delete(`/api/admin/question?quiz=${quiz}&questionId=${questionData._id}`);
+  
+        console.log(data);
+  
+      setIsOpen(false);
+      setLoadingDelete(false);
+      await dispatch(checkAdmin());
+      toast.success(data.message);
+      } catch (error) {
+        console.log(error);
+        error.response
+          ? toast.error(error.response.data.message)
+          : toast.error(error.message);
+          setLoadingDelete(false);
+      }
+  }
 
   const handleOptionChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +110,7 @@ const AddQuestion = ({ isOpen, setIsOpen, quiz }) => {
               <Dialog.Panel className="w-full mx-4 sm:max-w-lg p-6 bg-gray-900 text-white rounded-lg shadow-xl">
                 <div className="flex justify-between items-center">
                   <Dialog.Title className="text-lg font-medium leading-6 text-purple-400">
-                    Add Quiz Question
+                    Edit Quiz Question
                   </Dialog.Title>
                   <button
                     className="text-gray-400 hover:text-gray-200"
@@ -105,7 +128,6 @@ const AddQuestion = ({ isOpen, setIsOpen, quiz }) => {
                         ? "bg-purple-600 text-white"
                         : "bg-gray-700 text-gray-400"
                     } rounded-l-lg`}
-                    onClick={() => setActiveTab("details")}
                   >
                     Enter Details
                   </button>
@@ -115,7 +137,6 @@ const AddQuestion = ({ isOpen, setIsOpen, quiz }) => {
                         ? "bg-purple-600 text-white"
                         : "bg-gray-700 text-gray-400"
                     } rounded-r-lg`}
-                    onClick={() => setActiveTab("image")}
                   >
                     Upload Image
                   </button>
@@ -247,7 +268,7 @@ const AddQuestion = ({ isOpen, setIsOpen, quiz }) => {
                     </div>
                   )}
 
-                  <div className="mt-4">
+                  <div className="mt-4 flex flex-col gap-3">
                     <button
                       type="submit"
                       className="w-full bg-purple-600 text-white py-2 rounded"
@@ -255,7 +276,18 @@ const AddQuestion = ({ isOpen, setIsOpen, quiz }) => {
                       {loading ? (
                         <BeatLoader className=" self-center" color="white" />
                       ) : (
-                        "Add Question"
+                        "Update Question"
+                      )}
+                    </button>
+                    <button
+                    onClick={()=> setIsConfirmDialogOpen(true)}
+                    type="button"
+                      className="w-full bg-rose-600 text-white py-2 rounded"
+                    >
+                      {loadingDelete ? (
+                        <BeatLoader className=" self-center" color="white" />
+                      ) : (
+                        "Delete Question"
                       )}
                     </button>
                   </div>
@@ -269,8 +301,9 @@ const AddQuestion = ({ isOpen, setIsOpen, quiz }) => {
 
     </Transition>
       <ChooseMethod isOpen={isImageDialogOpen} setIsOpen={setIsImageDialogOpen} setImgUrl={setQuestionUrl} />
+    <ConfirmButton runFunction={handleDelete} buttonText={'Delete'} confirmState={isConfirmDialogOpen} setConfirmState={setIsConfirmDialogOpen} />
     </>
   );
 };
 
-export default AddQuestion;
+export default EditQuestion;

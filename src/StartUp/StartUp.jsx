@@ -30,7 +30,7 @@ const StartUp = ({ children }) => {
       {pathname.split("/")[2] !== "login" &&
         pathname.split("/")[1] !== "admin-login" &&
         pathname.split("/")[1] !== "forget-password" &&
-        pathname.split("/")[1] !== "start-quiz" &&
+        // pathname.split("/")[1] !== "start-quiz" &&
         pathname.split("/")[1] !== "login" && <Navbar />}
       {children}
     </>
