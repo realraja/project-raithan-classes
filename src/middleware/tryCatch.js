@@ -6,9 +6,9 @@ export const adminTryCatch = (passedFunction) => async(req) => {
     try {
         const isAdmin = await AdminAuth(req);
         if (!isAdmin) return ResponseFailed(401, "Please Login First", { isAdmin });
+        await connectDB();
 
         
-        await connectDB();
 
         return await passedFunction(req);
     } catch (error) {
@@ -19,13 +19,13 @@ export const adminTryCatch = (passedFunction) => async(req) => {
 
 export const userTryCatch = (passedFunction) => async(req) => {
     try {
+        await connectDB();
         const User = await UserAuth(req);
         if (!User) return ResponseFailed(401, "Please Login First", { User });
-
+// console.log("user ===>",User)
         req.id = User._id;
 
         
-        await connectDB();
 
         return await passedFunction(req);
     } catch (error) {

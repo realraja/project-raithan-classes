@@ -23,7 +23,7 @@ export const UserAuth = async(req)=>{
 //    const isVerified = jwt.verify(cookie.value,process.env.JWT_SECRET).password ===  process.env.ADMIN_PASSWORD
    const userId = getJWT(cookie.value).id;
 
-   console.log(userId);
+   // console.log(userId);
 
    const user = await User.findById(userId);
 

@@ -26,7 +26,7 @@ export const POST = async(req)=>{
         const token = createJWT({id:user._id});     
 
         user.token = token;
-        user.save();
+        await user.save();
 
         cookies().set({
             name: "Raithan_Token",
