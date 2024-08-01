@@ -43,7 +43,7 @@ const Header = () => {
             <span className="flex justify-center items-center px-5 py-2 transition-all ease-in duration-75 bg-rose-700 hover:text-gray-300 rounded-md group-hover:bg-opacity-0">
               {/* <AiFillStar className="w-6 h-6 mr-1" /> */}
               <span>LogOut</span>
-            </span>
+            </span> 
           </button>
         </div>
       </header>

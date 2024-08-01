@@ -22,7 +22,7 @@ const Page = ({ params }) => {
     setMounted(true);
     questions &&
       setQuestionsData(questions.filter((q) => q.for.includes(id)).reverse());
-  }, []);
+  }, [questions,id]);
 
   if (!mounted) return null;
 
@@ -44,7 +44,7 @@ const Page = ({ params }) => {
           questionsData.map(
             (i, v) =>
               i.for.includes(id) && (
-                <>
+                <React.Fragment key={i._id}>
                   <Accordion
                     key={v}
                     title={i.question}
@@ -53,13 +53,13 @@ const Page = ({ params }) => {
                     quizId={id}
                   />
                   <AccordionMobile
-                    key={v}
+                    key={i._id}
                     title={i.question}
                     data={i}
                     index={questionsData.length - v}
                     quizId={id}
                   />
-                </>
+                </React.Fragment>
               )
           )}
       </div>
@@ -81,7 +81,7 @@ const Accordion = ({ title, data, index, quizId }) => {
 
   const dispatch = useDispatch();
 
-  const handleDelete = async (e) => {
+  const handleDelete = async () => {
     setLoadingDelete(true);
     try {
       const response = await axios.delete(

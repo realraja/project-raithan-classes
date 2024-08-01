@@ -1,107 +1,21 @@
 "use client"
 import { UpdateQuestion, UpdateQuiz } from "@/utils/UserActions";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ModalImage from "react-modal-image";
 
 const questionss = [
-  {
-    options: {
-      a: "kldka",
-      b: "kasldk",
-      c: "lksadlk",
-      d: "lsdkas",
-      e: "Not Attempted",
-    },
-    question: "lkrek",
-    answer: "b",
-    timer: 4,
-  },
-  {
-    options: {
-      a: "kldka",
-      b: "kasldk",
-      c: "lksadlk",
-      d: "lsdkas",
-      e: "Not Attempted",
-    },
-    question: "lkrek\n\n",
-    answer: "b",
-    timer: 4,
-  },
-  {
-    options: {
-      a: "kldka",
-      b: "kasldk",
-      c: "lksadlk",
-      d: "lsdkas",
-      e: "Not Attempted",
-    },
-    question: "lkrek\n\n",
-    answer: "b",
-    timer: 4,
-  },
-  {
-    options: {
-      a: "kldka",
-      b: "kasldk",
-      c: "lksadlk",
-      d: "lsdkas",
-      e: "Not Attempted",
-    },
-    question: "lkrek\n\n",
-    answer: "b",
-    timer: 4,
-  },
-  {
-    options: {
-      a: "real",
-      b: "fack ",
-      c: "mango",
-      d: "tea",
-      e: "Not Attempted",
-    },
-    question: "this is test question",
-    answer: "d",
-    timer: 3,
-  },
-  {
-    options: {
-      a: "option 1",
-      b: "option 2",
-      c: "option 3",
-      d: "option 4",
-      e: "Not Attempted",
-    },
-    question: "test question 2",
-    answer: "a",
-    timer: 1,
-  },
-  {
-    options: {
-      a: "option 1",
-      b: "option 2",
-      c: "option 3",
-      d: "option 4",
-      e: "Not Attempted",
-    },
-    question: "test question 1",
-    answer: "c",
-    timer: 1,
-  },
+  // Your questions array
 ];
 
-export default function Quiz({ questions = questionss, name ,quizId,userId}) {
+export default function Quiz({ questions = questionss, name, quizId, userId }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState(
     new Array(questions.length).fill(null)
   );
-  const [timeLeft, setTimeLeft] = useState(questions[currentQuestion].timer*60); // 1 minute for each question
+  const [timeLeft, setTimeLeft] = useState(questions[currentQuestion].timer * 60); // 1 minute for each question
   const [score, setScore] = useState(null);
-
-  const [result, setResult] = useState({right:0,wrong:0,notAttemped:0});
-
-  // console.log(questions)
+  const [result, setResult] = useState({ right: 0, wrong: 0, notAttempted: 0 });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -115,82 +29,72 @@ export default function Quiz({ questions = questionss, name ,quizId,userId}) {
     return () => clearInterval(timer);
   }, [currentQuestion]);
 
+  const handleNext = useCallback(() => {
+    const selectedOptionKey = Object.keys(questions[currentQuestion].options)[selectedOptions[currentQuestion]];
+
+    UpdateQuestion({ questionId: questions[currentQuestion]._id, option: selectedOptionKey });
+
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setTimeLeft(questions[currentQuestion + 1].timer * 60); // reset timer for next question
+    } else {
+      handleSubmit();
+    }
+  }, [currentQuestion, questions, selectedOptions]);
+
   useEffect(() => {
     if (timeLeft === 0) {
       const newSelections = [...selectedOptions];
-    newSelections[currentQuestion] = 4;
-    setSelectedOptions(newSelections);
-      handleNext()};
-  }, [timeLeft]);
+      newSelections[currentQuestion] = 4;
+      setSelectedOptions(newSelections);
+      handleNext();
+    }
+  }, [timeLeft, selectedOptions, currentQuestion, handleNext]);
 
   useEffect(() => {
-    
     const newSelections = [...selectedOptions];
-  questions.map((i,j)=>{
-    const userAnswer = i.users.find(user => user.id === userId)?.choosed;
-    console.log(userAnswer)
-
-    if(userAnswer){
-      if (j < questions.length - 1) {
-        setCurrentQuestion(j+1);
-        setTimeLeft(questions[j].timer*60); // reset timer for next question
+    questions.forEach((i, j) => {
+      const userAnswer = i.users.find(user => user.id === userId)?.choosed;
+      if (userAnswer && selectedOptions[j] !== null) {
+        if (j < questions.length - 1) {
+          setCurrentQuestion(j + 1);
+          setTimeLeft(questions[j + 1].timer * 60); // reset timer for next question
+        }
+        switch (userAnswer) {
+          case 'a':
+            newSelections[j] = 0;
+            setSelectedOptions(newSelections);
+            break;
+          case 'b':
+            newSelections[j] = 1;
+            setSelectedOptions(newSelections);
+            break;
+          case 'c':
+            newSelections[j] = 2;
+            setSelectedOptions(newSelections);
+            break;
+          case 'd':
+            newSelections[j] = 3;
+            setSelectedOptions(newSelections);
+            break;
+          default:
+            newSelections[j] = 4;
+            setSelectedOptions(newSelections);
+            break;
+        }
       }
-      switch (userAnswer) {
-      case 'a':
-        newSelections[j] = 0;
-        setSelectedOptions(newSelections);        
-        break;
-      case 'b':
-        newSelections[j] = 1;
-        setSelectedOptions(newSelections);        
-        break;
-      case 'c':
-        newSelections[j] = 2;
-        setSelectedOptions(newSelections);        
-        break;
-      case 'd':
-        newSelections[j] = 3;
-        setSelectedOptions(newSelections);        
-        break;
-    
-      default:
-        newSelections[j] = 4;
-        setSelectedOptions(newSelections);  
-        break;
-    }}
-  })
-  }, [questions])
+    });
+  }, [questions, userId, selectedOptions]);
 
   const handleOptionSelect = (index) => {
     const newSelections = [...selectedOptions];
     newSelections[currentQuestion] = index;
     setSelectedOptions(newSelections);
-    // console.log(selectedOptions)
-  };
-
-  const handleNext = () => {
-    const selectedOptionKey = Object.keys(questions[currentQuestion].options)[selectedOptions[currentQuestion]];
-     
-    // console.log(questions[currentQuestion].answer === selectedOptionKey);
-    
-    UpdateQuestion({questionId:questions[currentQuestion]._id,option:selectedOptionKey});
-
-
-
-    if (currentQuestion < questions.length - 1) {
-
-
-
-      setCurrentQuestion(currentQuestion + 1);
-      setTimeLeft(questions[currentQuestion].timer*60); // reset timer for next question
-    } else {
-      handleSubmit();
-    }
   };
 
   const handleSubmit = () => {
     let calculatedScore = 0;
-    let getResult = {right:0,wrong:0,notAttemped:0};
+    let getResult = { right: 0, wrong: 0, notAttempted: 0 };
     selectedOptions.forEach((option, index) => {
       const correctAnswer = questions[index].answer;
       const selectedOptionKey = Object.keys(questions[index].options)[option];
@@ -198,23 +102,20 @@ export default function Quiz({ questions = questionss, name ,quizId,userId}) {
         calculatedScore += 1;
         getResult.right += 1;
       } else if (selectedOptionKey === "e") {
-        // Do nothing for not attempted questions
-        
-        getResult.notAttemped += 1;
+        getResult.notAttempted += 1;
       } else {
         calculatedScore -= 0.25;
-        
         getResult.wrong += 1;
       }
     });
-    UpdateQuiz({quizId,score:calculatedScore})
+    UpdateQuiz({ quizId, score: calculatedScore });
     setScore(calculatedScore);
     setResult(getResult);
   };
 
   if (score !== null) {
     return (
-      <Result score={score} totalQuestions={questions.length} correctAnswers={result.right} incorrectAnswers={result.wrong} notAttemped={result.notAttemped} />
+      <Result score={score} totalQuestions={questions.length} correctAnswers={result.right} incorrectAnswers={result.wrong} notAttempted={result.notAttempted} />
     );
   }
 
@@ -269,16 +170,15 @@ export default function Quiz({ questions = questionss, name ,quizId,userId}) {
           <div className="bg-purple-600 w-14 h-14 rounded-lg flex justify-center items-center">
             <p className="text-4xl font-mono">{currentQuestion + 1}</p>
           </div>
-          {!questions[currentQuestion].questionUrl?<p className="font-mono text-lg w-full sm:w-[80%]">
+          {!questions[currentQuestion].questionUrl ? <p className="font-mono text-lg w-full sm:w-[80%]">
             {questions[currentQuestion].question}
-          </p>:<div className="w-[80%]">
-          <ModalImage
+          </p> : <div className="w-[80%]">
+            <ModalImage
               small={questions[currentQuestion].questionUrl}
               large={questions[currentQuestion].questionUrl} // Replace with your actual image URL
               alt="question Image"
             />
-            {/* <img src={questions[currentQuestion].questionUrl} alt="question image" /> */}
-            </div>}
+          </div>}
         </div>
 
         <div className={`flex ${questions[currentQuestion].questionUrl || 'flex-col'} flex-wrap justify-evenly gap-5 pt-8 px-4 sm:px-10 text-xl`}>
@@ -299,7 +199,7 @@ export default function Quiz({ questions = questionss, name ,quizId,userId}) {
           <button
             onClick={() => setCurrentQuestion((prev) => prev - 1)}
             disabled={currentQuestion === 0}
-            className="flex justify-center items-center gap-3 bg-purple-700 text-xl px-5 py-2 lg:px-8 lg:py-3 rounded-xl disabled:opacity-50"
+            className="flex justify-center items-center gap-3 bg-purple-700 text-white py-2 px-5 rounded-md hover:bg-purple-800 duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -309,7 +209,12 @@ export default function Quiz({ questions = questionss, name ,quizId,userId}) {
             >
               <path
                 fillRule="evenodd"
-                d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z"
+                d="M20.03 11.47a.75.75 0 0 1 0 1.06l-8.25 8.25a.75.75 0 1 1-1.06-1.06L18.19 12 10.72 4.53a.75.75 0 0 1 1.06-1.06l8.25 8.25Z"
+                clipRule="evenodd"
+              />
+              <path
+                fillRule="evenodd"
+                d="M3 11.25a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0v-12A.75.75 0 0 1 3 11.25Z"
                 clipRule="evenodd"
               />
             </svg>
@@ -317,30 +222,26 @@ export default function Quiz({ questions = questionss, name ,quizId,userId}) {
           </button>
           <button
             onClick={handleNext}
-            disabled={selectedOptions[currentQuestion] === null}
-            className="flex justify-center items-center gap-3 bg-purple-700 text-xl px-5 py-2 lg:px-8 lg:py-3 rounded-xl disabled:opacity-50"
+            className="flex justify-center items-center gap-3 bg-purple-700 text-white py-2 px-5 rounded-md hover:bg-purple-800 duration-300"
           >
-            {currentQuestion === questions.length - 1 ? (
-              <span>Submit</span>
-            ) : (
-              <>
-                <span>Next</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-                  />
-                </svg>
-              </>
-            )}
+            <span>{currentQuestion === questions.length - 1 ? "Submit" : "Next"}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                fillRule="evenodd"
+                d="M3.97 12.53a.75.75 0 0 1 0-1.06l8.25-8.25a.75.75 0 1 1 1.06 1.06L5.81 12l7.47 7.47a.75.75 0 0 1-1.06 1.06l-8.25-8.25Z"
+                clipRule="evenodd"
+              />
+              <path
+                fillRule="evenodd"
+                d="M21 11.25a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0v-12a.75.75 0 0 1 .75-.75Z"
+                clipRule="evenodd"
+              />
+            </svg>
           </button>
         </div>
       </div>
@@ -348,46 +249,42 @@ export default function Quiz({ questions = questionss, name ,quizId,userId}) {
   );
 }
 
-const OptionDiv = ({ index, data, isSelected, onClick }) => {
+function OptionDiv({ data, index, onClick, isSelected }) {
   return (
-    <div onClick={onClick} className="flex items-center gap-3">
-      <p className="text-3xl font-mono">{index}.</p>
-      <div
-        
-        className={`border-2 cursor-pointer border-purple-600 w-full rounded-lg p-3 min-w-16 text-center ${
-          isSelected && "bg-purple-600/85"
-        }`}
-      >
-        {data}
-      </div>
+    <div
+      onClick={onClick}
+      className={`flex items-center justify-center gap-2 p-4 rounded-md cursor-pointer hover:scale-105 duration-300 ${
+        isSelected
+          ? "bg-purple-600 text-white"
+          : "bg-purple-100 text-black"
+      }`}
+    >
+      <span className="font-bold">{index}.</span>
+      <span>{data}</span>
     </div>
   );
-};
+}
 
-const Result = ({ score, totalQuestions, correctAnswers, incorrectAnswers, notAttemped }) => {
+function Result({ score, totalQuestions, correctAnswers, incorrectAnswers, notAttempted }) {
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4">
-      <div className="text-center">
-      <div className="text-6xl mb-4 text-yellow-400 text-center flex justify-center" ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-28">
-  <path fillRule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.658-.744 49.22 49.22 0 0 0-6.093-.377c-2.063 0-4.096.128-6.093.377a.75.75 0 0 0-.657.744Zm0 2.629c0 1.196.312 2.32.857 3.294A5.266 5.266 0 0 1 3.16 5.337a45.6 45.6 0 0 1 2.006-.343v.256Zm13.5 0v-.256c.674.1 1.343.214 2.006.343a5.265 5.265 0 0 1-2.863 3.207 6.72 6.72 0 0 0 .857-3.294Z" clipRule="evenodd" />
-</svg>
-</div>
-        <h1 className="text-4xl font-bold mb-2">Your Score</h1>
-        <h2 className="text-2xl mb-4">{score}/{totalQuestions}</h2>
-        <Link href={'/'}>
-          <button className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 mb-4">
+    <div className="flex flex-col items-center justify-center h-screen">
+      <div className="bg-white p-8 rounded-lg shadow-md text-center">
+        <h1 className="text-2xl font-bold mb-4">Quiz Results</h1>
+        <p className="mb-2">Score: {score}</p>
+        <p className="mb-2">Total Questions: {totalQuestions}</p>
+        <p className="mb-2">Correct Answers: {correctAnswers}</p>
+        <p className="mb-2">Incorrect Answers: {incorrectAnswers}</p>
+        <p className="mb-2">Not Attempted: {notAttempted}</p>
+        <Link href="/">
+          <button className="mt-4 bg-purple-700 text-white py-2 px-4 rounded-md hover:bg-purple-800 duration-300">
             Go Home
           </button>
         </Link>
-        <div className="text-lg">
-          <p className="text-green-400">✔ Correct Answers: {correctAnswers}</p>
-          <p className="text-red-400">✖ Incorrect Answers: {incorrectAnswers}</p>
-          <p className="text-purple-400"> Not Answered: {notAttemped}</p>
-        </div>
       </div>
     </div>
   );
 }
+
 
 /* 
 return (
