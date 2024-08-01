@@ -9,6 +9,7 @@ import Navbar from './Navbar';
 import { loginAction } from '@/redux/slices/adminSlice';
 import toast from 'react-hot-toast';
 import { CheckAdmin } from '@/utils/AdminActions';
+import { checkAdmin } from '@/redux/actions/adminActions';
 
 const Layout = ({ children }) => {
 
@@ -24,6 +25,7 @@ const Layout = ({ children }) => {
       // console.log("data",data);
       if(data.success){
         dispatch(loginAction());
+        await dispatch(checkAdmin());
         toast.success(data.message);
       }else{
         toast.error(data.message);

@@ -11,13 +11,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { CheckUser } from '@/utils/UserActions';
 import { loginAction, logoutAction, setLoadingFalse } from '@/redux/slices/userSlice';
+import { BeatLoader } from 'react-spinners';
 
 const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
   const {isAdmin} = useSelector(state => state.admin);
-  // const {isUser} = useSelector(state => state.user);
+  const {loading} = useSelector(state => state.user);
   
   const [isOpen, setIsOpen] = useState(false);
   
@@ -69,7 +70,10 @@ const Navbar = () => {
               <span className='text-3xl sm:block font-serif font-extralight'>Raithan Classes</span>
             </div>
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          {loading? <BeatLoader
+          color="#b03acf"
+  margin={4}
+  speedMultiplier={3} />:<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <button
             onClick={()=> router.push('/01-test-image')}
               type="button"
@@ -142,7 +146,7 @@ const Navbar = () => {
                 </Menu.Items>
               </Transition>
             </Menu>
-          </div>
+          </div>}
         </div>
       </div>
 
