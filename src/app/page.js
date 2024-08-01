@@ -29,7 +29,7 @@ export default function Home() {
   
   
   useEffect(()=>{
-    return async()=>{
+    const GetSetQuiz = async()=>{
       const data = await GetQuizesData({courseId:selectedCourse._id || user?.courses[0]._id});
       // console.log(data);
       if(data.success){
@@ -39,7 +39,8 @@ export default function Home() {
         toast.error(data.message);
       }
     }
-  },[selectedCourse,setSelectedCourse,user])
+    GetSetQuiz();
+  },[selectedCourse,setSelectedCourse,user,dispatch])
   return (<div className='App'>
     <div className='items-center mx-20'>
 { user?.courses && <SelectCourse data={user.courses} setSelectedData={setSelectedCourse} />}

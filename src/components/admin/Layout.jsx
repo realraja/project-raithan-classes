@@ -19,7 +19,7 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
 
-    return async()=>{
+    const CheckIsAdmin = async()=>{
       const data = await CheckAdmin();
       // console.log("data",data);
       if(data.success){
@@ -30,8 +30,10 @@ const Layout = ({ children }) => {
        router.push('/raithan-add/login'); 
       }
     }
+
+    CheckIsAdmin();
    
-  }, [router])
+  }, [router,dispatch])
 
   return (
     <div className="flex h-screen">

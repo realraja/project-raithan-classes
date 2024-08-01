@@ -33,8 +33,8 @@ const Navbar = () => {
     }
 
 
-    useEffect(() =>{      
-      return async()=>{
+    useEffect(() =>{
+      const checkUserFun =  async()=>{     
         const data = await CheckUser();
         // console.log("data======>",data);
         if(data.success){
@@ -45,8 +45,10 @@ const Navbar = () => {
           toast.error(data.message);
           router.push('/login');
         }
+        
       }
-    },[router]);
+      checkUserFun();   
+    },[router,dispatch]);
 
   return (
     <nav className={`bg-gray-800 w-full sticky top-0 z-50 ${pathname.split("/")[2] !== "login" &&
