@@ -57,9 +57,9 @@ const AddStudent = ({ confirmState, setConfirmState, runFunction }) => {
     }
   };
 
-  if(courses.length === 0) coursesData && setCourses([coursesData[0]._id])
+  if(courses.length === 0) coursesData && setCourses([coursesData[0]?._id])
   useEffect(() => {
-  coursesData && setCourses([coursesData[0]._id])
+  coursesData && setCourses([coursesData[0]?._id])
   }, [coursesData])
 
   return (

@@ -12,7 +12,11 @@ const Layout = ({ children }) => {
   const router = useRouter();
 
   const {isAdmin,loading} = useSelector(state => state.admin);
-  if(!isAdmin) return router.push('/raithan-add/login');  
+
+  useEffect(() => {
+  
+    if(!isAdmin) return router.push('/raithan-add/login');  
+  }, [isAdmin,router])
 
   return (
     <div className="flex h-screen">

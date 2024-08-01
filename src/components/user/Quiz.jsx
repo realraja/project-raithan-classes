@@ -40,7 +40,7 @@ export default function Quiz({ questions = questionss, name, quizId, userId }) {
     } else {
       handleSubmit();
     }
-  }, [currentQuestion, questions, selectedOptions]);
+  }, [currentQuestion, questions, selectedOptions,handleSubmit]);
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -92,7 +92,7 @@ export default function Quiz({ questions = questionss, name, quizId, userId }) {
     setSelectedOptions(newSelections);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     let calculatedScore = 0;
     let getResult = { right: 0, wrong: 0, notAttempted: 0 };
     selectedOptions.forEach((option, index) => {
@@ -111,7 +111,7 @@ export default function Quiz({ questions = questionss, name, quizId, userId }) {
     UpdateQuiz({ quizId, score: calculatedScore });
     setScore(calculatedScore);
     setResult(getResult);
-  };
+  },[questions,quizId,selectedOptions]);
 
   if (score !== null) {
     return (

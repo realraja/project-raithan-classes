@@ -3,6 +3,14 @@ import mongoose, { Schema, Types, model } from "mongoose";
 const schema = new Schema(
   {
     name: String,
+    publish:{
+      type: Boolean,
+      default: false
+    },
+    notification:{
+      type: Boolean,
+      default: false
+    },
     forSubject: [
       {
         type: Types.ObjectId,
